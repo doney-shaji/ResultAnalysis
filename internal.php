@@ -63,13 +63,7 @@ if (isset($_SESSION["user_id"])) {
     <div class="container">
     <form method="POST"  name="reg_form"  action = "internal_process.php" class="form">
         <h2>Internal Entry</h2>
-        <!-- <label for="firstInput" class="form-label">User id:</label>
-        <select class="form-select" name="firstInput" id="firstInput">
-            <option>Theory</option>
-            <option>Practical</option>
-        </select> -->
-        <label for="ProgramID" class="form-label">Program:</label>
-        <select class="form-select" name="program" id="program" onchange="populateSubjects()">
+        <select name="program" id="program" onchange="populateSubjects()">
             <option value="">(Select PROGRAM)</option>
             <option value="AEI">APPLIED ELECTRONICS AND INSTRUMENTATION ENGINEERING</option>
             <option value="AD">ARTIFICIAL INTELLIGENCE AND DATA SCIENCE</option>
@@ -81,8 +75,7 @@ if (isset($_SESSION["user_id"])) {
             <option value="ME">MECHANICAL ENGINEERING</option>
         </select>
 
-        <label for="semester" class="form-label">Semester: </label>
-        <select class="form-select semester" name="semester" id="semester" onchange="populateSubjects()">
+        <select class="semester" name="semester" id="semester" onchange="populateSubjects()">
             <option value="">(Select Semester)</option>
             <option value="S1">S1</option>
             <option value="S2">S2</option>
@@ -94,22 +87,20 @@ if (isset($_SESSION["user_id"])) {
             <option value="S8">S8</option>
         </select>
 
-        <label for="subject" class="form-label">Select Subject:</label>
-        <select class="form-select" name="subject" id="subject">
+        <select name="subject" id="subject">
             <option value="">Please select a branch and semester</option>
         </select>
        
-        <label for="exam_type" class="form-label">Exam Name:</label>
-        <select class="form-select exam_type" name="exam_type" id="exam_type">
+        <select class="exam_type" name="exam_type" id="exam_type">
+            <option value="">Exam Name:</option>
             <option>Series 1</option>
             <option>Series 2</option>
         </select>
 <!--         
-        <label for="total_marks" class="form-label">Total Marks:</label>
+        <label for="total_marks">Total Marks:</label>
         <input type="text" name="total_marks" class="form-control total_marks" /> -->
-
-        <label for="parts" class="form-label">Number Of Parts:</label>
-        <input type="number" name="parts" class="form-control parts" id="number-of-parts" min="1" onchange="displayInputFields()"/>
+        <br>
+        <input type="number" name="parts" class="parts" placeholder="Number of Parts: " id="number-of-parts" min="1" onchange="displayInputFields()"/>
 
         <div id="input-container"></div>
         

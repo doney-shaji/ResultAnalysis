@@ -1,5 +1,4 @@
 function populateSubjects(){
-    console.log("here");
     var branchSelect = document.getElementById("program");
     var semesterSelect = document.getElementById("semester");
     var subjectSelect = document.getElementById("subject");
@@ -52,28 +51,27 @@ function displayInputFields() {
 
     //Creating the corresponding labels
     var label = document.createElement("label");
-        label.textContent = "Marks for Part " + String.fromCharCode(65 + i) + ":"; //ASCII 65-A
-        inputContainer.appendChild(label);
+        // label.textContent = "Marks for Part " + String.fromCharCode(65 + i) + ":"; //ASCII 65-A
+        // inputContainer.appendChild(label);
 
     // Creating the corresponding input fields
     var input = document.createElement("input");
     input.type = "text";
-    input.name = "input" + (i + 1);
-    var partname = "input" + (i + 1);
-    input.placeholder = "Input " + (i + 1);
+    input.name = "inputMarks" + String.fromCharCode(65 + i);
+    input.placeholder = "Marks for Part " + String.fromCharCode(65 + i);
     inputContainer.appendChild(input);
 
     inputContainer.appendChild(document.createElement("br"));
 
     var label = document.createElement("label");
-        label.textContent = "Number Of Questions in Part " + String.fromCharCode(65 + i) + ":"; //ASCII 65-A
-        inputContainer.appendChild(label);
+        // label.textContent = "Number Of Questions in Part " + String.fromCharCode(65 + i) + ":"; //ASCII 65-A
+        // inputContainer.appendChild(label);
 
     // Creating the corresponding input fields
     var input = document.createElement("input");
     input.type = "number";
-    input.name = "input" + (i + 1);
-    input.placeholder = "Questions in " + (i + 1);
+    input.name = "inputQuestions" + String.fromCharCode(65 + i);
+    input.placeholder = "Questions in " + String.fromCharCode(65 + i);
     inputContainer.appendChild(input);
     inputContainer.appendChild(document.createElement("br"));
 
@@ -87,7 +85,7 @@ function displayInputFields() {
       // Creating the "Yes" checkbox
       var checkboxYes = document.createElement("input");
       checkboxYes.type = "checkbox";
-      checkboxYes.name = "Y";
+      checkboxYes.name = "answer";
       checkboxYes.value = "Yes";
       inputContainer.appendChild(checkboxYes);
       inputContainer.appendChild(document.createTextNode("Yes"));
@@ -95,7 +93,7 @@ function displayInputFields() {
       // Creating the "No" checkbox
       var checkboxNo = document.createElement("input");
       checkboxNo.type = "checkbox";
-      checkboxNo.name = "N";
+      checkboxNo.name = "answer";
       checkboxNo.value = "No";
       inputContainer.appendChild(checkboxNo);
       inputContainer.appendChild(document.createTextNode("No"));
