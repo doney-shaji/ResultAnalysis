@@ -1,16 +1,10 @@
 <?php
-
 session_start();
-
 if (isset($_SESSION["user_id"])) {
-    
     $mysqli = require __DIR__ . "/database.php";
-    
     $sql = "SELECT * FROM login_db
-            WHERE id = {$_SESSION["user_id"]}";
-            
-    $result = $mysqli->query($sql);
-    
+            WHERE id = {$_SESSION["user_id"]}";      
+    $result = $mysqli->query($sql); 
     $user = $result->fetch_assoc();
 }
 ?>
@@ -62,18 +56,51 @@ if (isset($_SESSION["user_id"])) {
 <center>
     
     <div class="container">
-        <form action="question_process.php" method="post" class="form">
-            <h2>Question Entry</h2>
-            <label for="part_id" class="form-label">Part ID:</label>
-            <input type="text" name="part_id" id="part_id" class="form-control parts" required>
+    <form method="POST"  name="reg_form"  action = "resultAnalysis_questionsProcess.php" class="form">
+        <h2>Question Entry</h2>
+        <select name="program" id="program" onchange="populateSubjects()">
+            <option value="">(Select PROGRAM)</option>
+            <option value="AEI">APPLIED ELECTRONICS AND INSTRUMENTATION ENGINEERING</option>
+            <option value="AD">ARTIFICIAL INTELLIGENCE AND DATA SCIENCE</option>
+            <option value="CE">CIVIL ENGINEERING</option>
+            <option value="CSE">COMPUTER SCIENCE AND ENGINEERING</option>
+            <option value="EEE">ELECTRICAL AND ELECTRONICS ENGINEERING</option>
+            <option value="ECE">ELECTRONICS AND COMMUNICATION ENGINEERING</option>
+            <option value="IT">INFORMATION TECHNOLOGY</option>
+            <option value="ME">MECHANICAL ENGINEERING</option>
+        </select>
 
-            <label for="module_no" class="form-label">Module No:</label>
-            <input type="text" name="module_no" id="module_no" class="form-control parts" required>
+        <select class="semester" name="semester" id="semester" onchange="populateSubjects()">
+            <option value="">(Select Semester)</option>
+            <option value="S1">S1</option>
+            <option value="S2">S2</option>
+            <option value="S3">S3</option>
+            <option value="S4">S4</option>
+            <option value="S5">S5</option>
+            <option value="S6">S6</option>
+            <option value="S7">S7</option>
+            <option value="S8">S8</option>
+        </select>
 
-            <label for="question_text" class="form-label">Question Text:</label>
-            
-            <input type="text" name="question_text" id="question_text" class="form-control parts" required>
-
+        <select name="subject" id="subject">
+            <option value="">Please select a branch and semester</option>
+        </select>
+       
+        <select name="exam_type" onchange='Checkexam_types(this.value);'> 
+            <option>(pick a exam_type)</option>  
+            <option>Series 1</option>
+            <option>Series 2</option>
+            <option value="ESE">ESE</option>
+            <option value="Retest">Retest</option>
+            <option value="others">others</option>
+        </select>
+        <select class="batch" name="batch" id="batch" onchange="">
+            <option value="">(Select Batch)</option>
+            <option value="2020-2024">2020-2024</option>
+            <option value="2021-2025">2021-2025</option>
+            <option value="2022-2026">2022-2026</option>
+            <option value="2023-2027">2023-2027</option>
+        </select><br>
             <input type="submit" value="Submit">
         </form>
     </div>

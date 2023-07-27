@@ -1,0 +1,184 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stacked Bar Chart with Chart.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- <script src="New folder/jsPDF-1.3.2/jspdf.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="index.php">RESULT ANALYSIS</a>
+        </div>
+      </nav>
+    <div style="width: 1200px; margin: 10px;">
+        <select name="program" id="program">
+            <option value="">(Select PROGRAM)</option>
+            <option value="AEI">APPLIED ELECTRONICS AND INSTRUMENTATION ENGINEERING</option>
+            <option value="AD">ARTIFICIAL INTELLIGENCE AND DATA SCIENCE</option>
+            <option value="CE">CIVIL ENGINEERING</option>
+            <option value="CSE">COMPUTER SCIENCE AND ENGINEERING</option>
+            <option value="EEE">ELECTRICAL AND ELECTRONICS ENGINEERING</option>
+            <option value="ECE">ELECTRONICS AND COMMUNICATION ENGINEERING</option>
+            <option value="IT">INFORMATION TECHNOLOGY</option>
+            <option value="ME">MECHANICAL ENGINEERING</option>
+        </select>
+        <select class="semester" name="semester" id="semester">
+            <option value="">(Select Semester)</option>
+            <option value="S1">S1</option>
+            <option value="S2">S2</option>
+            <option value="S3">S3</option>
+            <option value="S4">S4</option>
+            <option value="S5">S5</option>
+            <option value="S6">S6</option>
+            <option value="S7">S7</option>
+            <option value="S8">S8</option>
+        </select>
+        <select class="exam_type" name="exam_type" id="exam_type">
+            <option value="">Exam Name:</option>
+            <option>Series 1</option>
+            <option>Series 2</option>
+            <option>ESE</option>
+            <option>Retest</option>
+            <option>other</option>
+        </select>
+        <select class="batch" name="batch" id="batch" onchange="">
+            <option value="">(Select Batch)</option>
+            <option value="2020-2024">2020-2024</option>
+            <option value="2021-2025">2021-2025</option>
+            <option value="2022-2026">2022-2026</option>
+            <option value="2023-2027">2023-2027</option>
+        </select>
+        <button style="margin: 20px;" id="generatePdfButton" class="btn btn-outline-secondary">Generate PDF</button><br>
+        <canvas id="myChart" width="200" height="200"></canvas>
+    </div>
+    <script>
+        let myChart = null; // Store the chart instance
+
+        // Event listener for changes in any of the dropdowns
+        document.getElementById('program').addEventListener('change', fetchDataAndUpdateChart);
+        document.getElementById('semester').addEventListener('change', fetchDataAndUpdateChart);
+        document.getElementById('exam_type').addEventListener('change', fetchDataAndUpdateChart);
+        document.getElementById('batch').addEventListener('change', fetchDataAndUpdateChart);
+
+        function fetchDataAndUpdateChart() {
+            const selectedProgram = document.getElementById('program').value;
+            const selectedSemester = document.getElementById('semester').value;
+            const selectedExamType = document.getElementById('exam_type').value;
+            const selectedBatch = document.getElementById('batch').value;
+
+            // Check if all dropdowns have been selected
+            if (!selectedProgram || !selectedSemester || !selectedExamType || !selectedBatch) {
+                return; // Return if any dropdown is not selected
+            }
+
+            fetchData(selectedProgram, selectedSemester, selectedExamType, selectedBatch)
+                .then(chartData => {
+                    // Destroy the previous chart instance if it exists
+                    if (myChart) {
+                        myChart.destroy();
+                    }
+                    createChart(chartData);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+        function fetchData(program, semester, examType, batch) {
+            const url = `fetch_data.php?program=${program}&semester=${semester}&exam_type=${examType}&batch=${batch}`;
+            return fetch(url)
+                .then(response => response.json());
+        }
+
+        // Function to generate random colors
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Function to create the chart using Chart.js
+        function createChart(chartData) {
+            const yLabels = ['0-10', '11-20', '21-30', '31-40', '41-50'];
+
+            const datasets = chartData.map(subjectData => {
+                const data = yLabels.map(range => subjectData[range]);
+
+                return {
+                    label: subjectData.CourseID,
+                    data: data,
+                    backgroundColor: getRandomColor(),
+                    stack: 'Stack 0',
+                };
+            });
+
+            const ctx = document.getElementById("myChart").getContext("2d");
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: yLabels,
+                    datasets: datasets,
+                },
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+        }
+        document.getElementById('generatePdfButton').addEventListener('click', function () {
+            const Program = document.getElementById('program').value;
+            const Semester = document.getElementById('semester').value;
+            const ExamType = document.getElementById('exam_type').value;
+            const Batch = document.getElementById('batch').value;
+            const canvas = document.getElementById('myChart');
+
+        // Convert the canvas to an image
+        const imgData = canvas.toDataURL('image/png');
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+
+        // Add the image to the PDF
+        pdf.addImage(imgData, 'PNG', 10, 50, 150, 150);
+        const fontSize = 12; // Choose your desired font size
+
+        // Set the font color (using RGB color values)
+        pdf.setTextColor(85, 85, 85);
+
+        // Set the font size and font type
+        pdf.setFontSize(fontSize);
+        pdf.setFont('times', 'normal');
+        // Set the font size
+        pdf.setFontSize(fontSize);
+
+        pdf.text(10, 10, `Program: ${Program}`);
+        pdf.text(10, 20, `Semester: ${Semester}`);
+        pdf.text(10, 30, `Batch: ${Batch}`);
+        pdf.text(10, 40, `Exam Name: ${ExamType}`);
+
+        // Save the PDF
+        pdf.save('chart.pdf');
+    });
+    </script>
+</body>
+</html>

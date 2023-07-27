@@ -1,19 +1,12 @@
 <?php
-
 session_start();
-
 if (isset($_SESSION["user_id"])) {
-    
     $mysqli = require __DIR__ . "/database.php";
-    
     $sql = "SELECT * FROM login_db
             WHERE id = {$_SESSION["user_id"]}";
-            
     $result = $mysqli->query($sql);
-    
     $user = $result->fetch_assoc();
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,6 +14,11 @@ if (isset($_SESSION["user_id"])) {
     <title>Home</title>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+        .buttons button{
+            margin: 5px;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -42,30 +40,42 @@ if (isset($_SESSION["user_id"])) {
                     </li>
                 </ul>
             <form class="d-flex">
-            <!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> -->
-                <!-- <button onclick="window.location.href='logout.php';" class="btn btn-outline-danger" >Log out</button> -->
                 <?php if (isset($user)): ?>
                     <a href="logout.php" class="btn btn-outline-danger">Log out</a>
                 <?php else: ?>
                     <a href="login.php" class="btn btn-outline-danger">Log in</a>
-                <!-- <p><a href="login.php">Log in</a> or <a href="signup.html">sign up</a> or or Enter the <a href="C:\xampp\htdocs\Result_analysis\mark_entry.php">Marks</a></p> -->
-                
                 <?php endif; ?>
-                <!-- <a href="logout.php" class="btn btn-outline-danger">Log out</a> -->
             </form>
         </div>
     </div>
 </nav>
+<div>
+    <?php
+        if(isset($_SESSION['status'])){
+            ?>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Hey!</strong> <?php echo $_SESSION['status'];?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php
+            unset($_SESSION['status']);
+        }
+    ?>
+</div>
 <center>
-    <h1>Home</h1>
-    
+    <h1>Home</h1> 
     <?php if (isset($user)): ?>
-        
-        <p>Welcome <?= htmlspecialchars($user["name"]) ?></p>
-    
-        <button class="btn btn-outline-warning" onclick="window.location.href = 'question.php';">Question</button>
-        <button class="btn btn-outline-warning" onclick="window.location.href = 'internal.php';">Internal</button>
-        <button class="btn btn-outline-warning" onclick="window.location.href = 'marks.php';">Marks</button>
+        <div class="buttons" style="width: 700px; height: 200px">
+            <p>Welcome <?= htmlspecialchars($user["name"]) ?></p>
+            <button class="btn btn-outline-warning" onclick="window.location.href = '/phpspreadsheet/resultAnalysis_student.php';">Student List</button>
+            <button class="btn btn-outline-warning" onclick="window.location.href = 'internal.php';">Internal</button>
+            <button class="btn btn-outline-warning" onclick="window.location.href = 'question.php';">Question</button>
+            <button class="btn btn-outline-warning" onclick="window.location.href = 'resultAnalysis_totalMarksSelection.php';">Total Marks Entry</button>
+            
+            <button class="btn btn-outline-warning" onclick="window.location.href = 'resultAnalysis_RemedialList.php';">Remedial List</button>
+            <button class="btn btn-outline-warning" onclick="window.location.href = 'resultAnalysis_marks.php';">Individual Marks</button>
+            <button class="btn btn-outline-warning" onclick="window.location.href = 'demo.html';">Subject Analysis</button>
+        </div>
     <?php endif; ?>
     
 

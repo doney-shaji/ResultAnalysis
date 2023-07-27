@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "morris.js": "^0.5.0"
+  }
+}
