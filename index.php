@@ -75,6 +75,7 @@ if (isset($_SESSION["user_id"])) {
             <button class="btn btn-outline-warning" onclick="window.location.href = 'resultAnalysis_RemedialList.php';">Remedial List</button>
             <button class="btn btn-outline-warning" onclick="window.location.href = 'resultAnalysis_marks.php';">Individual Marks</button>
             <button class="btn btn-outline-warning" onclick="window.location.href = 'demo.html';">Subject Analysis</button>
+            <button class="btn btn-outline-warning" onclick="window.location.href = 'resultAnalysis_moduleAnalysis.php';">Module Analysis</button>
         </div>
     <?php endif; ?>
     
@@ -82,14 +83,3 @@ if (isset($_SESSION["user_id"])) {
     </center>
 </body>
 </html>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    

@@ -121,7 +121,7 @@ if (isset($_SESSION["user_id"])) {
     }
     ?>
     
-    <form id="pdfForm" method="POST" action="generate_pdf.php">
+    <form id="pdfForm" method="POST" action="generate_pdf.php" target="_blank">
         <!-- Hidden input fields to store PHP variables -->
         <input type="hidden" name="exam_name" value="<?php echo isset($_POST['exam_type']) ? $_POST['exam_type'] : ''; ?>">
         <input type="hidden" name="ProgramID" value="<?php echo isset($_POST['program']) ? $_POST['program'] : ''; ?>">
