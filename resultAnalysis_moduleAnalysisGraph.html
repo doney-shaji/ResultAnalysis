@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Module Analysis</title>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="javascript.js"></script>
+</head>
+<body>
+    <form id="graph-form">
+        <label for="program">Program:</label>
+        <select name="program" id="program" onchange="populateSubjects()">
+            <option value="">(Select PROGRAM)</option>
+            <option value="AEI">APPLIED ELECTRONICS AND INSTRUMENTATION ENGINEERING</option>
+            <option value="AD">ARTIFICIAL INTELLIGENCE AND DATA SCIENCE</option>
+            <option value="CE">CIVIL ENGINEERING</option>
+            <option value="CSE">COMPUTER SCIENCE AND ENGINEERING</option>
+            <option value="EEE">ELECTRICAL AND ELECTRONICS ENGINEERING</option>
+            <option value="ECE">ELECTRONICS AND COMMUNICATION ENGINEERING</option>
+            <option value="IT">INFORMATION TECHNOLOGY</option>
+            <option value="ME">MECHANICAL ENGINEERING</option>
+        </select>
+
+        <label for="semester">semester:</label>
+        <select class="semester" name="semester" id="semester" onchange="populateSubjects()">
+            <option value="">(Select Semester)</option>
+            <option value="S1">S1</option>
+            <option value="S2">S2</option>
+            <option value="S3">S3</option>
+            <option value="S4">S4</option>
+            <option value="S5">S5</option>
+            <option value="S6">S6</option>
+            <option value="S7">S7</option>
+            <option value="S8">S8</option>
+        </select>
+
+        
+
+        <select name="subject" id="subject">
+            <option value="">Please select a branch and semester</option>
+        </select>
+        <select class="exam_type" name="exam_type" id="exam_type">
+            <option value="">Exam Name:</option>
+            <option>Series 1</option>
+            <option>Series 2</option>
+            <option>ESE</option>
+            <option>Retest</option>
+            <option>other</option>
+        </select>
+        <select class="batch" name="batch" id="batch" onchange="">
+            <option value="">(Select Batch)</option>
+            <option value="2020-2024">2020-2024</option>
+            <option value="2021-2025">2021-2025</option>
+            <option value="2022-2026">2022-2026</option>
+            <option value="2023-2027">2023-2027</option>
+        </select>
+
+        <button type="submit">Generate Graph</button>
+    </form>
+
+    <!-- Display the graph -->
+    <div style="width: 80%;">
+        <canvas id="moduleGraph"></canvas>
+    </div>
+
+    <script>
+        // AJAX form submission
+        document.getElementById("graph-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+            generateGraph();
+        });
+
+        function generateGraph() {
+            const formData = new FormData(document.getElementById("graph-form"));
+
+            fetch("moduleFetch_data.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(data => {
+                
+                createGraph(data);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        }
+
+        // Function to create the graph using Chart.js
+        function createGraph(data) {
+            var ctx = document.getElementById("moduleGraph").getContext("2d");
+            var myChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: data.module_numbers, // An array of module numbers
+                    datasets: [
+                        {
+                            label: "Weak",
+                            data: data.weak_count, // An array of counts for weak modules
+                            backgroundColor: 'rgba(16,183,169, 0.7)', // Customize color for weak scores
+                            borderColor: 'rgba(16,183,169, 1)',
+                            borderWidth: 1,
+                        },
+                        {
+                            label: "Strong",
+                            data: data.strong_count, // An array of counts for strong modules
+                            backgroundColor: 'rgba(155,231,225, 0.7)', // Customize color for strong scores
+                            borderColor: 'rgba(155,231,225, 1)',
+                            borderWidth: 1,
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
